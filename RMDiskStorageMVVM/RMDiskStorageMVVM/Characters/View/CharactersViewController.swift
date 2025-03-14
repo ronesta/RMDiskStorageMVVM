@@ -15,15 +15,25 @@ final class CharactersViewController: UIViewController {
         return tableView
     }()
 
-    var viewModel: CharacterViewModelProtocol?
-    var tableViewDataSource: CharactersDataSourceProtocol?
+    private let viewModel: CharactersViewModelProtocol
+    private let tableViewDataSource: CharactersDataSourceProtocol
+
+    init(viewModel: CharactersViewModelProtocol, tableViewDataSource: CharactersDataSourceProtocol) {
+        self.viewModel = viewModel
+        self.tableViewDataSource = tableViewDataSource
+        super.init(nibName: nil, bundle: nil)
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
         setupNavigationBar()
         setupViews()
         setupBindings()
-        viewModel?.getCharacters()
+        viewModel.viewDidLoad()
     }
 
     private func setupNavigationBar() {
@@ -47,7 +57,7 @@ final class CharactersViewController: UIViewController {
     }
 
     private func setupBindings() {
-        viewModel?.characters.bind { [weak self] _ in
+        viewModel.characters.bind { [weak self] _ in
             self?.tableView.reloadData()
         }
     }

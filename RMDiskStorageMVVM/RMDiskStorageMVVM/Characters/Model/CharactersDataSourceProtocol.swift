@@ -9,6 +9,4 @@ import Foundation
 import UIKit
 
 protocol CharactersDataSourceProtocol: UITableViewDataSource {
-    var viewModel: CharacterViewModelProtocol? { get set }
-    var networkManager: NetworkManagerProtocol? { get set }
 }

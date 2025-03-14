@@ -166,7 +166,7 @@ final class CharactersTableViewCell: UITableViewCell {
         return UIImage(cgImage: cgImage)
     }
 
-    func configure(with viewModel: CharacterCellViewModelProtocol) {
+    func configure(with viewModel: CharactersCellViewModelProtocol) {
         activityIndicator.startAnimating()
         characterImageView.image = viewModel.image
         nameLabel.text = viewModel.name

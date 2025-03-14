@@ -9,33 +9,37 @@ import Foundation
 import UIKit
 
 final class CharactersTableViewDataSource: NSObject, CharactersDataSourceProtocol {
-    var viewModel: CharacterViewModelProtocol?
-    var networkManager: NetworkManagerProtocol?
+    private let viewModel: CharactersViewModelProtocol
+    private let imageLoader: ImageLoaderProtocol
+
+    init(viewModel: CharactersViewModelProtocol,
+         imageLoader: ImageLoaderProtocol
+    ) {
+        self.viewModel = viewModel
+        self.imageLoader = imageLoader
+    }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        viewModel?.numberOfCharacters() ?? 0
+        viewModel.numberOfCharacters()
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(
-            withIdentifier: CharacterTableViewCell.id,
-            for: indexPath) as? CharacterTableViewCell else {
+            withIdentifier: CharactersTableViewCell.id,
+            for: indexPath) as? CharactersTableViewCell else {
             return UITableViewCell()
         }
 
-        guard let character = viewModel?.character(at: indexPath.row) else {
-            return UITableViewCell()
-        }
-
+        let character = viewModel.character(at: indexPath.row)
         let imageURL = character.image
 
-        networkManager?.loadImage(from: imageURL) { loadedImage in
+        imageLoader.loadImage(from: imageURL) { loadedImage in
             DispatchQueue.main.async {
-                guard let cell = tableView.cellForRow(at: indexPath) as? CharacterTableViewCell  else {
+                guard let cell = tableView.cellForRow(at: indexPath) as? CharactersTableViewCell  else {
                     return
                 }
 
-                let viewModel = CharacterCellViewModel(character: character, image: loadedImage)
+                let viewModel = CharactersCellViewModel(character: character, image: loadedImage)
                 cell.configure(with: viewModel)
             }
         }

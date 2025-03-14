@@ -8,7 +8,7 @@
 import Foundation
 import UIKit
 
-struct CharactersCellViewModel: CharacterCellViewModelProtocol {
+struct CharactersCellViewModel: CharactersCellViewModelProtocol {
     var image: UIImage?
     let name: String
     let speciesAndGender: String

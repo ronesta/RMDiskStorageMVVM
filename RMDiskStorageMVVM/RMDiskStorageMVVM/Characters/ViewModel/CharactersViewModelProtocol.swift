@@ -10,7 +10,7 @@ import Foundation
 protocol CharactersViewModelProtocol {
     var characters: Observable<[Character]> { get set }
 
-    func getCharacters()
+    func viewDidLoad()
     func numberOfCharacters() -> Int
     func character(at index: Int) -> Character
 }

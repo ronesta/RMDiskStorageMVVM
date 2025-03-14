@@ -1,3 +1,10 @@
+//
+//  ImageLoader.swift
+//  RMDiskStorageMVVM
+//
+//  Created by Ибрагим Габибли on 14.03.2025.
+//
+
 import Foundation
 import UIKit.UIImage
 

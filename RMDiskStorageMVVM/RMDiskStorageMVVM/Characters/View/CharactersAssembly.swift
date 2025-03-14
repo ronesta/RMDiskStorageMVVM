@@ -9,22 +9,25 @@ import Foundation
 import UIKit
 
 struct CharactersAssembly {
-    func build() -> UIViewController {
-        let viewController = CharacterViewController()
-        let tableViewDataSource = CharacterTableViewDataSource()
+    func createModule() -> UIViewController {
         let storageManager = DiskStorageManager()
-        let networkManager = NetworkManager(storageManager: storageManager)
+        let charactersService = CharactersService()
+        let imageLoader = ImageLoader(storageManager: storageManager)
 
-        let characterViewModel = CharacterViewModel(
-            networkManager: networkManager,
+        let charactersViewModel = CharactersViewModel(
+            charactersService: charactersService,
             storageManager: storageManager
         )
 
-        viewController.tableViewDataSource = tableViewDataSource
-        viewController.viewModel = characterViewModel
+        let tableViewDataSource = CharactersTableViewDataSource(
+            viewModel: charactersViewModel,
+            imageLoader: imageLoader
+        )
 
-        tableViewDataSource.viewModel = characterViewModel
-        tableViewDataSource.networkManager = networkManager
+        let viewController = CharactersViewController(
+            viewModel: charactersViewModel,
+            tableViewDataSource: tableViewDataSource
+        )
 
         let navigationController = UINavigationController(rootViewController: viewController)
         return navigationController
