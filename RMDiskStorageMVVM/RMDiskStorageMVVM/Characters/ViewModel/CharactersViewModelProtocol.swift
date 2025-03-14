@@ -7,7 +7,7 @@
 
 import Foundation
 
-protocol CharacterViewModelProtocol {
+protocol CharactersViewModelProtocol {
     var characters: Observable<[Character]> { get set }
 
     func getCharacters()

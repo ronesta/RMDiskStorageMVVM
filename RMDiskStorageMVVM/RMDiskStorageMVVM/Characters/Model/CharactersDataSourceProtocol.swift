@@ -8,7 +8,7 @@
 import Foundation
 import UIKit
 
-protocol CharacterDataSourceProtocol: UITableViewDataSource {
+protocol CharactersDataSourceProtocol: UITableViewDataSource {
     var viewModel: CharacterViewModelProtocol? { get set }
     var networkManager: NetworkManagerProtocol? { get set }
 }

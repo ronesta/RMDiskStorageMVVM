@@ -7,7 +7,7 @@
 
 import Foundation
 
-final class CharacterViewModel: CharacterViewModelProtocol {
+final class CharactersViewModel: CharacterViewModelProtocol {
     var characters: Observable<[Character]> = Observable([])
     private let networkManager: NetworkManagerProtocol?
     private let storageManager: StorageManagerProtocol?

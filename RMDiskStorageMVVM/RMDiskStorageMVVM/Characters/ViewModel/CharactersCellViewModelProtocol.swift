@@ -8,7 +8,7 @@
 import Foundation
 import UIKit
 
-protocol CharacterCellViewModelProtocol {
+protocol CharactersCellViewModelProtocol {
     var image: UIImage? { get set }
     var name: String { get }
     var speciesAndGender: String { get }

@@ -8,7 +8,7 @@
 import Foundation
 import UIKit
 
-final class NetworkManager: NetworkManagerProtocol {
+final class CharactersService: NetworkManagerProtocol {
     var dataCounter = 1
     var imageCounter = 1
 

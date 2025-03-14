@@ -8,7 +8,7 @@
 import UIKit
 import SnapKit
 
-final class CharacterViewController: UIViewController {
+final class CharactersViewController: UIViewController {
     private let tableView: UITableView = {
         let tableView = UITableView(frame: .zero, style: .plain)
         tableView.separatorStyle = .none
@@ -16,7 +16,7 @@ final class CharacterViewController: UIViewController {
     }()
 
     var viewModel: CharacterViewModelProtocol?
-    var tableViewDataSource: CharacterDataSourceProtocol?
+    var tableViewDataSource: CharactersDataSourceProtocol?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -38,8 +38,8 @@ final class CharacterViewController: UIViewController {
 
         tableView.delegate = self
         tableView.dataSource = tableViewDataSource
-        tableView.register(CharacterTableViewCell.self,
-                           forCellReuseIdentifier: CharacterTableViewCell.id)
+        tableView.register(CharactersTableViewCell.self,
+                           forCellReuseIdentifier: CharactersTableViewCell.id)
 
         tableView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
@@ -54,7 +54,7 @@ final class CharacterViewController: UIViewController {
 }
 
 // MARK: - UITableViewDelegate
-extension CharacterViewController: UITableViewDelegate {
+extension CharactersViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         128
     }

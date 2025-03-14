@@ -8,7 +8,7 @@
 import Foundation
 import UIKit
 
-struct CharacterAssembly {
+struct CharactersAssembly {
     func build() -> UIViewController {
         let viewController = CharacterViewController()
         let tableViewDataSource = CharacterTableViewDataSource()
