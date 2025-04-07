@@ -9,9 +9,10 @@ import UIKit
 import SnapKit
 
 final class CharactersViewController: UIViewController {
-    private let tableView: UITableView = {
+    let tableView: UITableView = {
         let tableView = UITableView(frame: .zero, style: .plain)
         tableView.separatorStyle = .none
+        tableView.accessibilityIdentifier = "charactersTableView"
         return tableView
     }()
 
