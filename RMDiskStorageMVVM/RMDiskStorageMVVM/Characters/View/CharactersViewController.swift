@@ -16,7 +16,7 @@ final class CharactersViewController: UIViewController {
         return tableView
     }()
 
-    private let viewModel: CharactersViewModelProtocol
+    let viewModel: CharactersViewModelProtocol
     private let tableViewDataSource: CharactersDataSourceProtocol
 
     init(viewModel: CharactersViewModelProtocol, tableViewDataSource: CharactersDataSourceProtocol) {

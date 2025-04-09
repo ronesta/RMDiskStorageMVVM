@@ -16,7 +16,7 @@ final class CharactersViewControllerTests: XCTestCase {
     override func setUp() {
         super.setUp()
         mockViewModel = MockCharactersViewModel()
-        mockDataSource = MockDataSource()
+        mockDataSource = MockDataSource(viewModel: mockViewModel)
         viewController = CharactersViewController(viewModel: mockViewModel,
                                                   tableViewDataSource: mockDataSource
         )
@@ -44,4 +44,24 @@ final class CharactersViewControllerTests: XCTestCase {
         XCTAssertNotNil(viewController.tableView.delegate)
         XCTAssertTrue(viewController.tableView.delegate === viewController)
     }
+
+//    func testTableViewReloadsWhenViewModelCharactersChanges() {
+//        let expectation = expectation(description: "TableView Reloads")
+//
+//        mockDataSource.didCallReloadData = {
+//            expectation.fulfill()
+//        }
+//        
+//        mockViewModel.characters.value = [
+//            Character(name: "John Doe",
+//                      status: "Alive",
+//                      species: "Human",
+//                      gender: "Male",
+//                      location: Location(name: "Earth"),
+//                      image: "image_url"
+//                     )
+//        ]
+//
+//        wait(for: [expectation], timeout: 1.0)
+//    }
 }
