@@ -45,23 +45,29 @@ final class CharactersViewControllerTests: XCTestCase {
         XCTAssertTrue(viewController.tableView.delegate === viewController)
     }
 
-//    func testTableViewReloadsWhenViewModelCharactersChanges() {
-//        let expectation = expectation(description: "TableView Reloads")
-//
-//        mockDataSource.didCallReloadData = {
-//            expectation.fulfill()
-//        }
-//        
-//        mockViewModel.characters.value = [
-//            Character(name: "John Doe",
-//                      status: "Alive",
-//                      species: "Human",
-//                      gender: "Male",
-//                      location: Location(name: "Earth"),
-//                      image: "image_url"
-//                     )
-//        ]
-//
-//        wait(for: [expectation], timeout: 1.0)
-//    }
+    func testTableViewReloadsWhenViewModelCharactersChanges() {
+        let characters = [
+            Character(name: "John Doe",
+                      status: "Alive",
+                      species: "Human",
+                      gender: "Male",
+                      location: Location(name: "Earth"),
+                      image: "https://rickandmortyapi.com/api/character/avatar/2.jpeg"
+                     ),
+            Character(name: "Morty Smith",
+                      status: "Alive",
+                      species: "Human",
+                      gender: "Male",
+                      location: Location(name: "Earth (C-137)"),
+                      image: "https://rickandmortyapi.com/api/character/avatar/1.jpeg"
+                     )
+        ]
+
+        mockViewModel.characters.value = characters
+        viewController.loadViewIfNeeded()
+
+        XCTAssertEqual(mockViewModel.numberOfCharacters(), characters.count)
+        XCTAssertEqual(mockViewModel.character(at: 0).name, "John Doe")
+        XCTAssertEqual(mockViewModel.character(at: 1).name, "Morty Smith")
+    }
 }

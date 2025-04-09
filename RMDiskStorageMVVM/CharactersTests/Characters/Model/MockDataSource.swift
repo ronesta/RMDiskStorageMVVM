@@ -9,8 +9,6 @@ import UIKit
 @testable import RMDiskStorageMVVM
 
 final class MockDataSource: NSObject, CharactersDataSourceProtocol {
-    var didCallReloadData: (() -> Void)?
-
     private(set) var viewModel: CharactersViewModelProtocol
 
     init(viewModel: CharactersViewModelProtocol) {
@@ -35,9 +33,5 @@ final class MockDataSource: NSObject, CharactersDataSourceProtocol {
         cell.configure(with: viewModel)
 
         return cell
-    }
-
-    func reloadData() {
-        didCallReloadData?()
     }
 }

@@ -39,10 +39,6 @@ final class CharactersViewControllerSnapshotTests: XCTestCase {
 
         viewModel.characters.value = characters
         viewController.loadViewIfNeeded()
-        viewController.tableView.reloadData()
-
-        let numberOfRows = viewController.tableView.numberOfRows(inSection: 0)
-        print("numberOfRows in section is \(numberOfRows)")
 
         assertSnapshot(of: navigationController, as: .image)
     }
