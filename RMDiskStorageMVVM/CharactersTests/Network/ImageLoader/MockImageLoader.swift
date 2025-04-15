@@ -5,7 +5,7 @@
 //  Created by Ибрагим Габибли on 07.04.2025.
 //
 
-import UIKit
+import UIKit.UIImage
 @testable import RMDiskStorageMVVM
 
 final class MockImageLoader: ImageLoaderProtocol {

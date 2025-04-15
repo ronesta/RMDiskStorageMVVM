@@ -10,7 +10,7 @@ import SnapshotTesting
 @testable import RMDiskStorageMVVM
 
 final class CharactersViewControllerSnapshotTests: XCTestCase {
-    func testCharactersViewControllerDefaultAppearance() {
+    func testCharactersViewControllerAppearance() {
         let viewModel = MockCharactersViewModel()
         let dataSource = MockDataSource(viewModel: viewModel)
 

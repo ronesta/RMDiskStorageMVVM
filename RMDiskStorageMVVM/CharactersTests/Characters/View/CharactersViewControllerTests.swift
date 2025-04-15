@@ -9,9 +9,9 @@ import XCTest
 @testable import RMDiskStorageMVVM
 
 final class CharactersViewControllerTests: XCTestCase {
-    var viewController: CharactersViewController!
-    var mockViewModel: MockCharactersViewModel!
-    var mockDataSource: MockDataSource!
+    private var viewController: CharactersViewController!
+    private var mockViewModel: MockCharactersViewModel!
+    private var mockDataSource: MockDataSource!
 
     override func setUp() {
         super.setUp()
