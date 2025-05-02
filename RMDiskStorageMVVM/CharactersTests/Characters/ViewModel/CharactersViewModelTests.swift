@@ -10,12 +10,12 @@ import XCTest
 
 final class CharactersViewModelTests: XCTestCase {
     private var viewModel: CharactersViewModel!
-    private var mockService: MockCharactersServiceForViewModel!
+    private var mockService: MockCharactersService!
     private var mockStorageManager: MockStorageManager!
 
     override func setUp() {
         super.setUp()
-        mockService = MockCharactersServiceForViewModel()
+        mockService = MockCharactersService()
         mockStorageManager = MockStorageManager()
         viewModel = CharactersViewModel(
             charactersService: mockService,
@@ -30,7 +30,8 @@ final class CharactersViewModelTests: XCTestCase {
         super.tearDown()
     }
 
-    func testViewDidLoadWhenCharactersAreSaved() {
+    func testGivenSavedCharacters_WhenViewDidLoad_ThenCharactersAreDisplayedFromStorage() {
+        // Given
         let savedCharacters = [
             Character(name: "Summer Smith",
                       status: "Alive",
@@ -50,14 +51,17 @@ final class CharactersViewModelTests: XCTestCase {
 
         mockStorageManager.saveCharacters(savedCharacters)
 
+        // When
         viewModel.viewDidLoad()
 
+        // Then
         XCTAssertEqual(viewModel.numberOfCharacters(), savedCharacters.count)
         XCTAssertEqual(viewModel.character(at: 0).name, "Summer Smith")
         XCTAssertEqual(viewModel.character(at: 1).name, "Beth Smith")
     }
 
-    func testViewDidLoadWhenCharactersAreNotSaved() {
+    func testGivenNoSavedCharacters_WhenViewDidLoad_ThenCharactersAreFetchedAndDisplayed() {
+        // Given
         let fetchedCharacters = [
             Character(name: "Rick Sanchez",
                       status: "Alive",
@@ -76,22 +80,29 @@ final class CharactersViewModelTests: XCTestCase {
 
         ]
 
-        mockService.characters = fetchedCharacters
+        mockService.stubbedCharactersResult = .success(fetchedCharacters)
 
+        // When
         viewModel.viewDidLoad()
 
+        // Then
         XCTAssertEqual(viewModel.numberOfCharacters(), fetchedCharacters.count)
         XCTAssertEqual(viewModel.character(at: 0).name, "Rick Sanchez")
         XCTAssertEqual(viewModel.character(at: 1).name, "Morty Smith")
-        XCTAssertFalse(mockService.shouldReturnError)
+        XCTAssertEqual(mockService.getCharactersCallCount, 1)
         XCTAssertEqual(mockStorageManager.characters, fetchedCharacters)
     }
 
-    func testGetCharactersFailureShowsError() {
-        mockService.shouldReturnError = true
+    func testGivenServiceFailure_WhenViewDidLoad_ThenErrorIsDisplayed() {
+        // Given
+        let expectedError = NSError(domain: "Test", code: 0, userInfo: nil)
+        mockService.stubbedCharactersResult = .failure(expectedError)
 
+        // When
         viewModel.viewDidLoad()
 
+        // Then
+        XCTAssertEqual(mockService.getCharactersCallCount, 1)
         XCTAssertEqual(viewModel.numberOfCharacters(), 0)
     }
 }

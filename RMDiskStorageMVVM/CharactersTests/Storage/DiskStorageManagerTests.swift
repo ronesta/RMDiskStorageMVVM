@@ -10,30 +10,32 @@ import XCTest
 
 final class DiskStorageManagerTests: XCTestCase {
     private var storageManager: DiskStorageManager!
-    private var fileManager: FileManager!
+    private var mockFileManager: MockFileManager!
     private var documentsDirectory: URL!
 
     override func setUpWithError() throws {
         super.setUp()
-        storageManager = DiskStorageManager()
-        fileManager = FileManager.default
-        documentsDirectory = fileManager.urls(for: .documentDirectory, in: .userDomainMask).first!
+        mockFileManager = MockFileManager()
+        storageManager = DiskStorageManager(fileManager: mockFileManager)
+        documentsDirectory = mockFileManager.urls(for: .documentDirectory, in: .userDomainMask).first!
         let fileURL = documentsDirectory.appendingPathComponent("characters.json")
-        try? fileManager.removeItem(at: fileURL)
+        try? mockFileManager.removeItem(at: fileURL)
 
     }
 
     override func tearDownWithError() throws {
-        let contents = try fileManager.contentsOfDirectory(at: documentsDirectory, includingPropertiesForKeys: nil)
+        let contents = mockFileManager.storage.keys
+
         for file in contents {
-            try? fileManager.removeItem(at: file)
+            try? mockFileManager.removeItem(at: URL(fileURLWithPath: file))
         }
 
         storageManager = nil
         super.tearDown()
     }
 
-    func testSaveAndLoadCharacters() throws {
+    func testGivenCharacters_WhenSaveCharacters_ThenReturnsSameCharacters() throws {
+        // Given
         let testCharacters = [
             Character(name: "Rick Sanchez",
                       status: "Alive",
@@ -52,53 +54,83 @@ final class DiskStorageManagerTests: XCTestCase {
 
         ]
 
+        // When
         storageManager.saveCharacters(testCharacters)
         let loadedCharacters = storageManager.loadCharacters()
 
+        // Then
         XCTAssertNotNil(loadedCharacters)
         XCTAssertEqual(testCharacters, loadedCharacters)
     }
 
-    func testLoadCharactersReturnsNilWhenFileDoesNotExist() {
+    func testGivenNotExistFile_WhenLoadCharacters_ThenReturnsNil() {
+        // Given
+        // File does not exist
+
+        // When
         let loadedCharacters = storageManager.loadCharacters()
 
+        // Then
         XCTAssertNil(loadedCharacters)
     }
 
-    func testSaveAndLoadImage() throws {
+    func testGivenImageData_WhenSaveImage_ThenReturnsSameImageData() throws {
+        // Given
         let imageData = "TestImage".data(using: .utf8)!
         let imageKey = "testImageKey"
 
+        // When
         storageManager.saveImage(imageData, key: imageKey)
         let loadedImageData = storageManager.loadImage(key: imageKey)
 
+        // Then
         XCTAssertNotNil(loadedImageData)
         XCTAssertEqual(imageData, loadedImageData)
     }
 
-    func testLoadImageReturnsNilWhenFileDoesNotExist() {
+    func testGivenNonExistImageKey_WhenLoadImage_ThenReturnsNil() {
+        // Given
         let nonExistentKey = "nonExistentKey"
 
+        // When
         let loadedImageData = storageManager.loadImage(key: nonExistentKey)
 
+        // Then
         XCTAssertNil(loadedImageData)
     }
 
-    func testSaveImageHandlesErrors() {
+    func testGivenInvalidImageKey_WhenSaveImage_ThenLoadImageReturnsNil() {
+        // Given
+        let imageData = Data()
         let invalidKey = "/invalid/path/imageKey"
-        let imageData = "TestImage".data(using: .utf8)!
 
+        // When
         storageManager.saveImage(imageData, key: invalidKey)
+        let loadedData = storageManager.loadImage(key: invalidKey)
+
+        // Then
+        XCTAssertNil(loadedData)
     }
 
-    func testSaveCharactersHandlesErrors() {
-        let testCharacters = [["invalidKey": "value"]]
+    func testGivenInvalidCharactersData_WhenSaveCharacters_ThenThrowsError() {
+        // Given
+        let mockJSON = """
+        {
+            "results": [
+                { "invalidKey": "value" }
+            ]
+        }
+        """
+
+        let invalidData = mockJSON.data(using: .utf8)!
         let fileURL = documentsDirectory.appendingPathComponent("invalidPath/characters.json")
 
+        // When
         do {
-            let data = try JSONEncoder().encode(testCharacters)
-            try data.write(to: fileURL)
+            try invalidData.write(to: fileURL)
+            XCTFail("Expected writing to invalid path to fail")
         } catch {
+            // Then
             XCTAssertNotNil(error)
         }
     }

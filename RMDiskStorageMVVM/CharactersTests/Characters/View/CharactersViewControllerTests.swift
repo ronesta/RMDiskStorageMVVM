@@ -29,15 +29,25 @@ final class CharactersViewControllerTests: XCTestCase {
         super.tearDown()
     }
 
-    func testViewDidLoadCallsViewModelViewDidLoad() {
+    func testGivenViewController_WhenViewDidLoad_ThenViewModelViewDidLoadIsCalled() {
+        // Given
+        // ViewController initialized with mockViewModel & mockDataSource
+
+        // When
         viewController.viewDidLoad()
 
+        // Then
         XCTAssertTrue(mockViewModel.viewDidLoadCalled)
     }
 
-    func testSetupViews() {
+    func testGivenViewController_WhenViewDidLoad_ThenTableViewIsConfigured() {
+        // Given
+        // ViewController initialized with mockViewModel & mockDataSource
+
+        // When
         viewController.viewDidLoad()
 
+        // Then
         XCTAssertNotNil(viewController.tableView.dataSource)
         XCTAssertTrue(viewController.tableView.dataSource === mockDataSource)
 
@@ -45,7 +55,8 @@ final class CharactersViewControllerTests: XCTestCase {
         XCTAssertTrue(viewController.tableView.delegate === viewController)
     }
 
-    func testTableViewReloadsWhenViewModelCharactersChanges() {
+    func testGivenCharacters_WhenViewModelChanges_ThenTableViewIsUpdated() {
+        // Given
         let characters = [
             Character(name: "John Doe",
                       status: "Alive",
@@ -64,8 +75,11 @@ final class CharactersViewControllerTests: XCTestCase {
         ]
 
         mockViewModel.characters.value = characters
+
+        // When
         viewController.loadViewIfNeeded()
 
+        // Then
         XCTAssertEqual(mockViewModel.numberOfCharacters(), characters.count)
         XCTAssertEqual(mockViewModel.character(at: 0).name, "John Doe")
         XCTAssertEqual(mockViewModel.character(at: 1).name, "Morty Smith")
